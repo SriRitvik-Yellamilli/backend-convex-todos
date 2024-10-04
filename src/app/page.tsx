@@ -1,19 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { NewToDoForm } from "./_components/new-todo-form";
 import { FiTrash2 } from "react-icons/fi";
-
-type ToDoItem = {
-  title: string;
-  description: string;
-  completed: boolean;
-};
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { NewToDoForm } from "./_components/new-todo-form";
+import { Id } from "../../convex/_generated/dataModel";
 
 export default function Home() {
-  const [todos, setTodos] = useState<ToDoItem[]>([
-    { title: "Example", description: "This is an example", completed: false },
-  ]);
+  const updateTodo = useMutation(api.functions.updateTodo);
+  const deleteTodo = useMutation(api.functions.deleteTodo);
+  const todos = useQuery(api.functions.listTodos);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -21,54 +18,60 @@ export default function Home() {
   }, []);
 
   return (
-    <div className={`min-h-screen bg-gray-100 transition-opacity duration-700 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`min-h-screen bg-white transition-opacity duration-700 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
       <div className="max-w-screen-md mx-auto p-6 space-y-8">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-extrabold text-black">To-Do List</h1>
+
+        <div className="text-center">
+          <h1 className="text-5xl font-extrabold text-black animate-bounce">
+            To-Do App!
+          </h1>
+          <p className="text-lg text-black mt-4 font-medium tracking-wide leading-relaxed">
+            Stay organized, stay productive. Let’s get things done!
+          </p>
         </div>
 
         <ul className="space-y-4">
-          {todos.map(({ title, description, completed }, index) => (
+          {todos?.map(({ _id, title, description, completed }, index) => (
             <ToDoItem
               key={index}
+              id={_id}
               title={title}
               description={description}
               completed={completed}
-              onCompleteChanged={(newValue) => handleCompleteChange(index, newValue)}
-              onRemove={() => handleRemove(index)}
+              onCompleteChanged={(newValue) => handleCompleteChange(_id, newValue)}
+              onRemove={() => handleRemove(_id)}
             />
           ))}
         </ul>
 
-        <NewToDoForm onCreate={handleCreate} />
+        {/* Removed Floating Add Button */}
+        <NewToDoForm />
       </div>
     </div>
   );
 
-  function handleCompleteChange(index: number, newValue: boolean) {
-    setTodos((prev) => {
-      const newTodos = [...prev];
-      newTodos[index].completed = newValue;
-      return newTodos;
-    });
+  function handleCompleteChange(id: Id<"todos">, newValue: boolean) {
+    updateTodo({ id, completed: newValue });
   }
 
-  function handleRemove(index: number) {
-    setTodos((prev) => prev.filter((_, i) => i !== index));
+  function handleRemove(id: Id<"todos">) {
+    deleteTodo({ id });
   }
 
-  function handleCreate(title: string, description: string) {
-    setTodos((prev) => [...prev, { title, description, completed: false }]);
+  function openModal() {
+    // Functionality to open modal for adding new to-do
   }
 }
 
 function ToDoItem({
+  id,
   title,
   description,
   completed,
   onCompleteChanged,
   onRemove,
 }: {
+  id: Id<"todos">;
   title: string;
   description: string;
   completed: boolean;
@@ -76,16 +79,20 @@ function ToDoItem({
   onRemove: () => void;
 }) {
   return (
-    <li className="w-full flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-all transform hover:scale-105 hover:bg-gray-200 hover:shadow-lg hover:ring-2 hover:ring-gray-300 animate-pop">
+    <li className="w-full flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-all transform hover:scale-105 hover:bg-gray-100 hover:shadow-lg hover:ring-2 hover:ring-gray-300">
       <input
         type="checkbox"
         checked={completed}
-        onChange={(e) => onCompleteChanged(e.target.checked)}
-        className="w-6 h-6 rounded border-gray-300 focus:ring-blue-500 transition-transform transform hover:scale-110"
+        onChange={e => onCompleteChanged(e.target.checked)}
+        className="w-6 h-6 rounded border-gray-300 focus:ring-black transition-transform transform hover:scale-110"
       />
       <div className="flex-1">
-        <p className={`font-bold text-black transition-colors ${completed ? "line-through text-gray-500" : "text-black"}`}>{title}</p>
-        <p className="text-sm text-gray-600">{description}</p>
+        <p className={`font-bold transition-colors ${completed ? "line-through text-gray-500" : "text-black"}`}>
+          {title}
+        </p>
+        <p className={`text-sm transition-colors ${completed ? "line-through text-gray-500" : "text-gray-600"}`}>
+          {description}
+        </p>
       </div>
       <button
         type="button"

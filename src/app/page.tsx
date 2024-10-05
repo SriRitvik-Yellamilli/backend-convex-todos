@@ -59,7 +59,6 @@ export default function Home() {
 }
 
 function ToDoItem({
-  id,
   title,
   description,
   completed,

@@ -10,19 +10,19 @@ const createTodo = useMutation(api.functions.createTodo);
 
 const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await createTodo({title, description});
+    await createTodo({ title, description });
     setTitle("");
     setDescription("");
 };
 
 return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-    <div className="flex flex-col gap-2">
-        <label className="text-sm font-semibold" htmlFor="title">
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg">
+    <div className="flex flex-col gap-3">
+        <label className="text-sm font-semibold text-gray-700" htmlFor="title">
         Title
         </label>
         <input
-        className="p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+        className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
         type="text"
         name="title"
         id="title"
@@ -33,12 +33,12 @@ return (
         />
     </div>
 
-    <div className="flex flex-col gap-2">
-        <label className="text-sm font-semibold" htmlFor="description">
+    <div className="flex flex-col gap-3">
+        <label className="text-sm font-semibold text-gray-700" htmlFor="description">
         Description
         </label>
         <input
-        className="p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+        className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
         type="text"
         name="description"
         id="description"
@@ -50,7 +50,7 @@ return (
     </div>
 
     <button
-        className="w-full bg-blue-500 p-2 rounded-md text-white font-semibold hover:bg-blue-600 transition"
+        className="w-full bg-blue-600 p-3 rounded-lg text-white font-semibold shadow-md hover:bg-blue-700 transition duration-200 transform hover:scale-105"
         type="submit"
     >
         Create

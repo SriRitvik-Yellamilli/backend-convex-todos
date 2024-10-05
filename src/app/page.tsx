@@ -8,17 +8,17 @@ import { NewToDoForm } from "./_components/new-todo-form";
 import { Id } from "../../convex/_generated/dataModel";
 
 export default function Home() {
-  const updateTodo = useMutation(api.functions.updateTodo);
-  const deleteTodo = useMutation(api.functions.deleteTodo);
   const todos = useQuery(api.functions.listTodos);
   const [mounted, setMounted] = useState(false);
+  const updateTodo = useMutation(api.functions.updateTodo);
+  const deleteTodo = useMutation(api.functions.deleteTodo);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   return (
-    <div className={`min-h-screen bg-white transition-opacity duration-700 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
+<div className={`min-h-screen bg-white transition-opacity duration-700 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
       <div className="max-w-screen-md mx-auto p-6 space-y-8">
 
         <div className="text-center">
@@ -44,7 +44,6 @@ export default function Home() {
           ))}
         </ul>
 
-        {/* Removed Floating Add Button */}
         <NewToDoForm />
       </div>
     </div>
@@ -56,10 +55,6 @@ export default function Home() {
 
   function handleRemove(id: Id<"todos">) {
     deleteTodo({ id });
-  }
-
-  function openModal() {
-    // Functionality to open modal for adding new to-do
   }
 }
 
@@ -79,12 +74,12 @@ function ToDoItem({
   onRemove: () => void;
 }) {
   return (
-    <li className="w-full flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-all transform hover:scale-105 hover:bg-gray-100 hover:shadow-lg hover:ring-2 hover:ring-gray-300">
+    <li className="w-full flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-all transform hover:scale-105 hover:bg-gray-200 hover:shadow-lg hover:ring-2 hover:ring-gray-300 animate-pop">
       <input
         type="checkbox"
         checked={completed}
         onChange={e => onCompleteChanged(e.target.checked)}
-        className="w-6 h-6 rounded border-gray-300 focus:ring-black transition-transform transform hover:scale-110"
+        className="w-6 h-6 rounded border-gray-300 focus:ring-blue-500 transition-transform transform hover:scale-110"
       />
       <div className="flex-1">
         <p className={`font-bold transition-colors ${completed ? "line-through text-gray-500" : "text-black"}`}>

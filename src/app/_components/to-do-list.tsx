@@ -3,28 +3,36 @@ import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
 import { FiTrash2 } from "react-icons/fi";
 
-export function ToDoList({
-onCompleteChange,
-onRemove,
-}: {
-onCompleteChange: (id: Id<"todos">, newValue: boolean) => void;
-onRemove: (id: Id<"todos">) => void;
-}) {
+export function ToDoList() {
 const todos = useQuery(api.functions.listTodos);
 const updateTodo = useMutation(api.functions.updateTodo);
 const deleteTodo = useMutation(api.functions.deleteTodo);
 
+const handleCompleteChange = async (id: Id<"todos">, newValue: boolean) => {
+    console.log(`Updating todo ${id} to ${newValue ? "completed" : "not completed"}`);
+    await updateTodo({ id, completed: newValue });
+};
+
+const handleRemove = async (id: Id<"todos">) => {
+    console.log(`Removing todo with id ${id}`);
+    await deleteTodo({ id });
+};
+
+if (!todos) {
+    return <p className="text-gray-500 text-lg font-medium">Loading your tasks...</p>;
+}
+
 return (
     <ul className="space-y-4">
-    {todos?.map(({ _id, title, description, completed }) => (
+    {todos.map(({ _id, title, description, completed }) => (
         <ToDoItem
-          key={_id} // Use _id as the key instead of index for better performance
+        key={_id}
         id={_id}
         title={title}
         description={description}
         completed={completed}
-          onCompleteChanged={(newValue) => onCompleteChange(_id, newValue)} // Use the prop function
-          onRemove={() => onRemove(_id)} // Use the prop function
+        onCompleteChanged={(newValue) => handleCompleteChange(_id, newValue)}
+        onRemove={() => handleRemove(_id)}
         />
     ))}
     </ul>
@@ -46,7 +54,7 @@ onCompleteChanged: (newValue: boolean) => void;
 onRemove: () => void;
 }) {
 return (
-    <li className="w-full flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-all transform hover:scale-105 hover:bg-gray-200 hover:shadow-lg hover:ring-2 hover:ring-gray-300 animate-pop">
+    <li className="w-full flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-all transform hover:scale-105 hover:bg-gray-200 hover:shadow-lg hover:ring-2 hover:ring-gray-300">
     <input
         type="checkbox"
         checked={completed}
@@ -54,10 +62,18 @@ return (
         className="w-6 h-6 rounded border-gray-300 focus:ring-blue-500 transition-transform transform hover:scale-110"
     />
     <div className="flex-1">
-        <p className={`font-bold transition-colors ${completed ? "line-through text-gray-500" : "text-black"}`}>
+        <p
+        className={`font-bold transition-colors ${
+            completed ? "line-through text-gray-500" : "text-black"
+        }`}
+        >
         {title}
         </p>
-        <p className={`text-sm transition-colors ${completed ? "line-through text-gray-500" : "text-gray-600"}`}>
+        <p
+        className={`text-sm transition-colors ${
+            completed ? "line-through text-gray-500" : "text-gray-600"
+        }`}
+        >
         {description}
         </p>
     </div>

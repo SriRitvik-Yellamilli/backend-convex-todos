@@ -1,18 +1,12 @@
 "use client";
-
 import { Authenticated, Unauthenticated, AuthLoading } from "convex/react";
 import { SignInButton, UserButton } from "@clerk/nextjs";
 import { useState, useEffect } from "react";
-import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { NewToDoForm } from "./_components/new-todo-form";
-import { Id } from "../../convex/_generated/dataModel";
 import { ToDoList } from "./_components/to-do-list";
+import { NewToDoForm } from "./_components/new-todo-form";
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
-  const updateTodo = useMutation(api.functions.updateTodo);
-  const deleteTodo = useMutation(api.functions.deleteTodo);
 
   useEffect(() => {
     setIsMounted(true);
@@ -33,9 +27,8 @@ export default function Home() {
             </div>
             <UserButton />
           </div>
-
           <div className="mt-10 space-y-8">
-            <ToDoList onCompleteChange={handleCompleteChange} onRemove={handleRemove} />
+            <ToDoList /> 
             <NewToDoForm />
           </div>
         </Authenticated>
@@ -61,12 +54,4 @@ export default function Home() {
       </div>
     </div>
   );
-
-  function handleCompleteChange(id: Id<"todos">, newValue: boolean) {
-    updateTodo({ id, completed: newValue });
-  }
-
-  function handleRemove(id: Id<"todos">) {
-    deleteTodo({ id });
-  }
 }

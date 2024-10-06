@@ -30,13 +30,13 @@ export default function Home() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              <motion.h1 
-                className="text-6xl font-extrabold text-black tracking-tight drop-shadow-lg text-right"
-                animate={{ scale: [0.8, 1.1, 1], rotate: [0, 0, 0, 0] }}
-                transition={{ duration: 0.8, ease: "easeInOut" }}
-              >
-                Get Things Done
-              </motion.h1>
+          <motion.h1 
+            className="text-6xl font-extrabold text-black tracking-tight drop-shadow-lg text-right"
+            animate={{ y: [0, -30, 0] }} 
+            transition={{ duration: 0.8, ease: "easeInOut", repeat: Infinity }}
+            >
+              Get Things Done
+            </motion.h1>
               <p className="text-lg text-black font-medium tracking-wide leading-relaxed text-right">
                 Power up your productivity and stay on top of your tasks with ease!
               </p>

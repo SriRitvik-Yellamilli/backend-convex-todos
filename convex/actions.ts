@@ -5,8 +5,8 @@ import OpenAI from "openai";
 import { requireUser } from "./helpers";
 
 const openai = new OpenAI({
-  baseURL: "https://openrouter.ai/api/v1",
-  apiKey: process.env.OPENROUTER_API_KEY,
+baseURL: "https://openrouter.ai/api/v1",
+apiKey: process.env.OPENROUTER_API_KEY,
 });
 
 export const generateTodos = action({
@@ -38,8 +38,13 @@ export const generateTodos = action({
             }
 
             const content = JSON.parse(message) as {
-                todos: { title: string; description: string }[];
+                todos: { title: string; description: string; dueDate: string }[];
             };
+
+            content.todos = content.todos.map(todo => ({
+                ...todo,
+                dueDate: todo.dueDate || new Date().toISOString(), 
+            }));
 
             await ctx.runMutation(internal.functions.createManyTodos, {
                 todos: content.todos,

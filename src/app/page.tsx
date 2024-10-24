@@ -6,6 +6,7 @@ import { ToDoList } from "./_components/to-do-list";
 import { NewToDoForm } from "./_components/new-todo-form";
 import { GenerateTodosForm } from "./_components/generate-todos-form";
 import { motion } from "framer-motion";
+import { CalendarView } from "./_components/calendar-view";
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
@@ -30,13 +31,13 @@ export default function Home() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-          <motion.h1 
-            className="text-6xl font-extrabold text-black tracking-tight drop-shadow-lg text-right"
-            animate={{ y: [0, -30, 0] }} 
-            transition={{ duration: 0.8, ease: "easeInOut", repeat: Infinity }}
-            >
-              Get Things Done
-            </motion.h1>
+              <motion.h1 
+                className="text-6xl font-extrabold text-black tracking-tight drop-shadow-lg text-right"
+                animate={{ y: [0, -30, 0] }} 
+                transition={{ duration: 0.8, ease: "easeInOut", repeat: Infinity }}
+              >
+                Get Things Done
+              </motion.h1>
               <p className="text-lg text-black font-medium tracking-wide leading-relaxed text-right">
                 Power up your productivity and stay on top of your tasks with ease!
               </p>
@@ -58,6 +59,7 @@ export default function Home() {
             <ToDoList /> 
             <GenerateTodosForm />
             <NewToDoForm />
+            <CalendarView /> {/* Added CalendarView component */}
           </motion.div>
         </Authenticated>
 
@@ -69,7 +71,7 @@ export default function Home() {
             transition={{ duration: 1, ease: "easeOut" }}
           >
             <p className="text-gray-700 text-xl font-semibold">
-            Unlock a new way to organize your day. Log in to get started Today!
+              Unlock a new way to organize your day. Log in to get started Today!
             </p>
             <SignInButton>
               <motion.button

@@ -36,7 +36,7 @@ export default function Home() {
                 animate={{ y: [0, -30, 0] }} 
                 transition={{ duration: 0.8, ease: "easeInOut", repeat: Infinity }}
               >
-                Get Things Done
+                Todos AI
               </motion.h1>
               <p className="text-lg text-black font-medium tracking-wide leading-relaxed text-right">
                 Power up your productivity and stay on top of your tasks with ease!
